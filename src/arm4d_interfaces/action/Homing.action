@@ -1,0 +1,11 @@
+# Goal
+# (no fields needed — requesting homing is enough)
+---
+
+# Result
+bool success
+string message
+---
+
+# Feedback
+string step

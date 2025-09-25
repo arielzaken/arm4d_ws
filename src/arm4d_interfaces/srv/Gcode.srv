@@ -1,0 +1,13 @@
+# 0: G0
+# 1: G1
+# 2: grab
+# 3: relese
+
+uint8 type
+float32 l0
+float32 l1
+float32 l2
+float32 l3
+float32 feed
+---
+bool success
