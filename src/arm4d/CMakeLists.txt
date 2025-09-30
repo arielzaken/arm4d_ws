@@ -17,10 +17,22 @@ find_package(std_msgs REQUIRED)
 find_package(action_msgs REQUIRED)
 find_package(arm4d_interfaces REQUIRED) # for Homing.action
 
+add_executable(path_planning src/path_planning.cpp)
+
+target_link_libraries(path_planning PUBLIC 
+  ${std_msgs_TARGETS} 
+  rclcpp::rclcpp 
+  rclcpp_action::rclcpp_action 
+  ${arm4d_interfaces_TARGETS}
+)
+target_include_directories(path_planning PRIVATE
+  "./../eigen-master"
+  "include"
+)
 add_executable(IK src/IK.cpp)
 
 target_include_directories(IK PRIVATE
-  "./../eigen-master"
+  "include"
 )
 
 target_link_libraries(IK PUBLIC 
@@ -40,6 +52,7 @@ target_link_libraries(gcode_sender_node PUBLIC
 install(TARGETS 
   gcode_sender_node
   IK
+  path_planning
   DESTINATION lib/${PROJECT_NAME})
 
 

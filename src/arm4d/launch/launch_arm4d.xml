@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <node pkg="arm4d" exec="gcode_sender_node"/>
+  <node pkg="arm4d" exec="IK"/>
+</launch>

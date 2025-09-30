@@ -1,0 +1,13 @@
+# Goal
+Vector4[] points
+Vector4[] velocities
+float64[] times_from_start  # in milliseconds
+---
+
+# Result
+bool success
+string message
+---
+
+# Feedback
+uint32 current_point_index
