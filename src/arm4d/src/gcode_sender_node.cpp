@@ -50,7 +50,7 @@ public:
 	  last_state_("Unknown")
 	{
 		declare_parameter<std::string>("port", "/dev/ttyUSB0");
-		declare_parameter<int>("baud", 115200);
+		declare_parameter<int>("baud", 921600);
 		declare_parameter<int>("max_inflight", 8);
 
 		std::string port = get_parameter("port").as_string();
@@ -63,7 +63,6 @@ public:
 			RCLCPP_FATAL(get_logger(), "Failed to open serial port %s", port.c_str());
 			throw std::runtime_error("serial open failed");
 		}
-		RCLCPP_INFO(get_logger(), "Opened serial %s @ %d (max_inflight=%zu)", port.c_str(), baud, MAX_INFLIGHT_);
 
 		state_pub_ = create_publisher<std_msgs::msg::String>("controller_state", 10);
 
@@ -139,6 +138,7 @@ private:
 	int openSerial(const std::string &port, int baud){
 		int fd = open(port.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
 		if (fd < 0) return -1;
+		RCLCPP_INFO(get_logger(), "Opened serial %s @ %d (max_inflight=%zu)", port.c_str(), baud, MAX_INFLIGHT_);
 
 		struct termios tty{};
 		if (tcgetattr(fd, &tty) != 0) return -1;
@@ -171,6 +171,9 @@ private:
 			case 38400: return B38400;
 			case 57600: return B57600;
 			case 115200: return B115200;
+			case 230400: return B230400;
+			case 460800: return B460800;
+			case 921600: return B921600;
 			default: return B115200;
 		}
 	}

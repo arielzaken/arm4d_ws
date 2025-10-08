@@ -32,6 +32,7 @@ target_include_directories(path_planning PRIVATE
 add_executable(IK src/IK.cpp)
 
 target_include_directories(IK PRIVATE
+  "./../eigen-master"
   "include"
 )
 

@@ -1,0 +1,173 @@
+board: None
+name: Default (Test Drive)
+meta: null
+stepping:
+  engine: RMT
+  idle_ms: 255
+  pulse_us: 4
+  dir_delay_us: 0
+  disable_delay_us: 0
+  segments: 12
+kinematics:
+  Cartesian: null
+axes:
+  shared_stepper_disable_pin: NO_PIN
+  shared_stepper_reset_pin: NO_PIN
+  homing_runs: 2
+  x:
+    steps_per_mm: 20.445999
+    max_rate_mm_per_min: 5400
+    acceleration_mm_per_sec2: 10
+    max_travel_mm: 1000
+    soft_limits: false
+    homing:
+      cycle: 0
+      allow_single_axis: true
+      positive_direction: false
+      mpos_mm: -21
+      feed_mm_per_min: 300
+      seek_mm_per_min: 1350
+      settle_ms: 250
+      seek_scaler: 1.1
+      feed_scaler: 1.1
+    motor0:
+      limit_neg_pin: gpio.18:low
+      limit_pos_pin: NO_PIN
+      limit_all_pin: NO_PIN
+      hard_limits: true
+      pulloff_mm: 7
+      standard_stepper:
+        step_pin: gpio.13
+        direction_pin: gpio.27:low
+        disable_pin: NO_PIN
+  y:
+    steps_per_mm: 133.600006
+    max_rate_mm_per_min: 5400
+    acceleration_mm_per_sec2: 60
+    max_travel_mm: 1000
+    soft_limits: false
+    homing:
+      cycle: 0
+      allow_single_axis: true
+      positive_direction: false
+      mpos_mm: -13.622
+      feed_mm_per_min: 270
+      seek_mm_per_min: 1350
+      settle_ms: 250
+      seek_scaler: 1.1
+      feed_scaler: 1.1
+    motor0:
+      limit_neg_pin: gpio.5
+      limit_pos_pin: NO_PIN
+      limit_all_pin: NO_PIN
+      hard_limits: true
+      pulloff_mm: 6
+      standard_stepper:
+        step_pin: gpio.2
+        direction_pin: gpio.19
+        disable_pin: NO_PIN
+  z:
+    steps_per_mm: 133.699997
+    max_rate_mm_per_min: 5400
+    acceleration_mm_per_sec2: 60
+    max_travel_mm: 1000
+    soft_limits: false
+    homing:
+      cycle: 0
+      allow_single_axis: true
+      positive_direction: false
+      mpos_mm: -90.5
+      feed_mm_per_min: 270
+      seek_mm_per_min: 1350
+      settle_ms: 250
+      seek_scaler: 1.1
+      feed_scaler: 1.1
+    motor0:
+      limit_neg_pin: gpio.16
+      limit_pos_pin: NO_PIN
+      limit_all_pin: NO_PIN
+      hard_limits: true
+      pulloff_mm: 9
+      standard_stepper:
+        step_pin: gpio.26
+        direction_pin: gpio.25
+        disable_pin: NO_PIN
+  a:
+    steps_per_mm: 14.814815
+    max_rate_mm_per_min: 21600
+    acceleration_mm_per_sec2: 90
+    max_travel_mm: 1000
+    soft_limits: false
+    homing:
+      cycle: 0
+      allow_single_axis: true
+      positive_direction: false
+      mpos_mm: -166.5
+      feed_mm_per_min: 1080
+      seek_mm_per_min: 5400
+      settle_ms: 250
+      seek_scaler: 1.1
+      feed_scaler: 1.1
+    motor0:
+      limit_neg_pin: gpio.17:low
+      limit_pos_pin: NO_PIN
+      limit_all_pin: NO_PIN
+      hard_limits: false
+      pulloff_mm: 6
+      standard_stepper:
+        step_pin: gpio.33
+        direction_pin: gpio.32:low
+        disable_pin: NO_PIN
+coolant:
+  flood_pin: NO_PIN
+  mist_pin: NO_PIN
+  delay_ms: 0
+start:
+  must_home: false
+  deactivate_parking: false
+  check_limits: true
+parking:
+  enable: false
+  axis: Z
+  target_mpos_mm: -5
+  rate_mm_per_min: 800
+  pullout_distance_mm: 5
+  pullout_rate_mm_per_min: 250
+user_outputs:
+  analog0_pin: NO_PIN
+  analog1_pin: NO_PIN
+  analog2_pin: NO_PIN
+  analog3_pin: NO_PIN
+  analog0_hz: 5000
+  analog1_hz: 5000
+  analog2_hz: 5000
+  analog3_hz: 5000
+  digital0_pin: NO_PIN
+  digital1_pin: NO_PIN
+  digital2_pin: NO_PIN
+  digital3_pin: NO_PIN
+  digital4_pin: NO_PIN
+  digital5_pin: NO_PIN
+  digital6_pin: NO_PIN
+  digital7_pin: NO_PIN
+user_inputs:
+  analog0_pin: NO_PIN
+  analog1_pin: NO_PIN
+  analog2_pin: NO_PIN
+  analog3_pin: NO_PIN
+  digital0_pin: NO_PIN
+  digital1_pin: NO_PIN
+  digital2_pin: NO_PIN
+  digital3_pin: NO_PIN
+  digital4_pin: NO_PIN
+  digital5_pin: NO_PIN
+  digital6_pin: NO_PIN
+  digital7_pin: NO_PIN
+arc_tolerance_mm: 0.002
+junction_deviation_mm: 0.01
+verbose_errors: true
+report_inches: false
+enable_parking_override_control: false
+use_line_numbers: false
+planner_blocks: 16
+

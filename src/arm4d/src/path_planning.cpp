@@ -165,8 +165,8 @@ private:
 	 */
 	void execute_goal(const std::shared_ptr<GoalHandleMoveOnALine> goal_handle)
 	{
-		constexpr double dt = 5.0; // mm/s
-
+		constexpr double dt = 0.01;
+		const Eigen::Array4d normalizer(2.0, 2.0, 2.0, 81.0); // to make x,y,z,a have similar weight in distance calculation
 
 		const auto goal = goal_handle->get_goal();
 		auto feedback = std::make_shared<MoveOnALine::Feedback>();
@@ -187,29 +187,59 @@ private:
 			const Eigen::Vector4d a = xCurrent; // noop because compiler is cool, the constant term of the third order polynomial
 			const Eigen::Vector4d b = vCurrent; // noop because compiler is cool, the linear term of the third order polynomial
 			const Eigen::Vector4d c = (3*xNext-3*xCurrent-2*vCurrent*dTime-vNext*dTime)/(dTime * dTime); // the quadratic term of the third order polynomial
-			const Eigen::Vector4d d = (2*xCurrent+(vCurrent+vNext)*dTime-xNext*dTime)/(dTime*dTime*dTime); // the cubic term of the third order polynomial
+			const Eigen::Vector4d d = (2*xCurrent+(vCurrent+vNext)*dTime-2*xNext)/(dTime*dTime*dTime); // the cubic term of the third order polynomial
+
+			// for(double currentTime = 0; currentTime < dTime; currentTime += dt){
+			// 	if (goal_handle->is_canceling()) {
+			// 		result->success = false;
+			// 		result->message = "Canceled";
+			// 		goal_handle->canceled(result);
+			// 		return;
+			// 	}
+			// 	const Eigen::Vector4d pathPoint = a + b*currentTime + c*currentTime*currentTime + d*currentTime*currentTime*currentTime;
+			// 	arm4d_interfaces::srv::Step::Request step{};
+			// 	step.type = 1; // linear
+			// 	step.x = pathPoint[0];
+			// 	step.y = pathPoint[1];
+			// 	step.z = pathPoint[2];
+			// 	step.a = pathPoint[3];
+			// 	step.time = dt;
+
+			// 	arm4d::enqueue_blocking(out_queue_, mtx_out_, q_cv_out_, step, 10);
+
+			// 	feedback->current_point_index = static_cast<uint32_t>(i);
+			// 	goal_handle->publish_feedback(feedback);
+			// }
+
+			double lastTime;
+			Eigen::Vector4d lastPoint;
 
 			for(double currentTime = 0; currentTime < dTime; currentTime += dt){
-				if (goal_handle->is_canceling()) {
+				if( goal_handle->is_canceling()) {
 					result->success = false;
 					result->message = "Canceled";
 					goal_handle->canceled(result);
 					return;
 				}
-				const Eigen::Vector4d pathPoint = a + b*currentTime + c*currentTime*currentTime + d*currentTime*currentTime*currentTime;
-				arm4d_interfaces::srv::Step::Request step{};
-				step.type = 1; // linear
-				step.x = pathPoint[0];
-				step.y = pathPoint[1];
-				step.z = pathPoint[2];
-				step.a = pathPoint[3];
-				step.time = dt;
+				Eigen::Vector4d pathPoint = a + b*currentTime + c*currentTime*currentTime + d*currentTime*currentTime*currentTime;
+				Eigen::Vector4d dp = (pathPoint - lastPoint).array() * normalizer;
+				if( (currentTime == 0.0) || dp.norm() >= 1){
+					arm4d_interfaces::srv::Step::Request step{};
+					step.type = 1; // linear
+					step.x = pathPoint[0];
+					step.y = pathPoint[1];
+					step.z = pathPoint[2];
+					step.a = pathPoint[3];
+					step.time = currentTime - lastTime;
 
-				arm4d::enqueue_blocking(out_queue_, mtx_out_, q_cv_out_, step, 10);
+					arm4d::enqueue_blocking(out_queue_, mtx_out_, q_cv_out_, step, 10);
 
-				feedback->current_point_index = static_cast<uint32_t>(i);
-				goal_handle->publish_feedback(feedback);
+					lastTime = currentTime;
+					lastPoint = pathPoint;
+				}
 			}
+			feedback->current_point_index = static_cast<uint32_t>(i);
+			goal_handle->publish_feedback(feedback);
 		}
 
 		result->success = true;
@@ -244,7 +274,7 @@ private:
 						sent = true;
 					} else {
 						RCLCPP_WARN(get_logger(), "Step rejected by IK, retrying...");
-						std::this_thread::sleep_for(20us); // back-off
+						// std::this_thread::sleep_for(20us); // back-off
 					}
 				} else {
 					RCLCPP_WARN(get_logger(), "Timeout waiting for IK service, retrying...");
